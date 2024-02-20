@@ -23,3 +23,14 @@ def speak(what):
     speak_engine.runAndWait()
     speak_engine.stop()
 
+def time():
+    times = datetime.now()
+    return str(times.strftime('%H:%M'))
+
+def hello(func):
+    def wrapper(*args, **kwargs):
+        if not wrapper.has_run:
+            func(*args, **kwargs)
+            wrapper.has_run = True
+    wrapper.has_run = False
+    return wrapper
