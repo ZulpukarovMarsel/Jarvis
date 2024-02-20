@@ -6,13 +6,24 @@ from pydub import AudioSegment
 from pydub.playback import play
 
 command = {
+    'os': {
+        'switch_off': ('выключи ноутбук', 'выключи ноут')
+    },
     'se': {
         'jarvis': ('джарвис', 'привет джарвис', 'jarvis'),
         'break': ('стоп', 'break'),
         'thanks': ('спасибо', 'красавчик', 'благодарю'),
         'negative': ('да не ты тупой', 'ты тупой', 'не ты тупой')
+    },
+    'cmds': {
+        'audio': ('музыка', 'включи музыку'),
+        'youtube': ('открой ютуб', 'открой youtube'),
+        'kino': ('открой кино', 'время фильма'),
+        'github': ('открой git hub', 'открой гит хаб'),
+        'time': ('какое время', 'какое сейчас время')
     }
 }
+
 
 sr = speech_recognition.Recognizer()
 sr.pause_threshold = 0.5
@@ -68,3 +79,38 @@ def process_command(cmd):
         play_audio('sounds/app_sound_jarvis-og_off.wav')
         os.system("shutdown /s /t 0")
 
+
+while True:
+    with speech_recognition.Microphone() as mic:
+        try:
+            my_function()
+            sr.adjust_for_ambient_noise(source=mic, duration=0.5)
+            audio = sr.listen(source=mic)
+            query = sr.recognize_google(audio, language='ru-RU').lower()
+            # query = input('>>>') #тест
+            print(query)
+
+            if any(word in query for word in command['se']['jarvis']):
+                activate_jarvis()
+
+                while True:
+                    audio = sr.listen(source=mic)
+                    query = sr.recognize_google(audio, language='ru-RU').lower()
+                    # query = input('>>>') #тест
+                    print(query)
+
+                    if any(word in query for word in command['se']['break']):
+                        play_audio('sounds/app_sound_jarvis-og_not_found.wav')
+                        break
+                    elif any(word in query for word in command['se']['thanks']):
+                        play_audio('sounds/app_sound_jarvis-og_thanks.wav')
+
+                    elif any(word in query for word in command['se']['negative']):
+                        play_audio('sounds/app_sound_jarvis-og_stupid.wav')
+
+                    process_command(query)
+
+        except speech_recognition.UnknownValueError:
+            speak("Не удалось распознать речь")
+        except speech_recognition.RequestError as e:
+            speak(f"Ошибка сервиса распознавания речи: {e}")
