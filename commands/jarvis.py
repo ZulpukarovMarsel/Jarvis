@@ -34,3 +34,12 @@ def hello(func):
             wrapper.has_run = True
     wrapper.has_run = False
     return wrapper
+
+@hello
+def my_function():
+    play_audio('sounds/app_sound_jarvis-og_run.wav')
+# Вызываем функцию
+
+def play_audio(filename):
+    sound = AudioSegment.from_file(filename, format="wav")
+    play(sound)
