@@ -11,4 +11,4 @@ try:
         print('\b' * len(positionStr), end='', flush=True)
 
 except:
-    os.system('clear')
+    os.system('cls' if os.name == 'nt' else 'clear')

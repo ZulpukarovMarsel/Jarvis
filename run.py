@@ -1,5 +1,6 @@
 from commands.jarvis import jarvis_main, activate_jarvis
 
+
 def hello(func):
     def wrapper(*args, **kwargs):
         if not wrapper.has_run:
@@ -15,6 +16,6 @@ def my_function():
     activate_jarvis()
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     my_function()
     jarvis_main()
